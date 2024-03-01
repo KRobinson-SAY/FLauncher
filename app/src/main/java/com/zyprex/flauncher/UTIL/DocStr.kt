@@ -53,6 +53,7 @@ object DocStr {
    ..#back
    ..#home
 ➢ menu#*#**,<name1>;**,<name2>;...
+➢ timer#*#<message>,<minutes>:<seconds>
 
 OPCODE DENOTATIONS:
 

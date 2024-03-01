@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
+import android.provider.AlarmClock
 import android.provider.Settings
 import android.widget.EditText
 import android.widget.Toast
@@ -250,5 +251,21 @@ class Starter(val context: Context) {
                 }
             }.show()
         }
+    }
+
+    fun runTimer(param: String) {
+        val timerParam = param.split(",".toRegex(), 2)
+        val timerHM = timerParam[1].split(":".toRegex(), 2)
+        val timerLen = timerHM[0].toInt() * 60 + timerHM[1].toInt()
+        val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
+            putExtra(AlarmClock.EXTRA_MESSAGE, timerParam[0])
+            putExtra(AlarmClock.EXTRA_LENGTH, timerLen)
+            putExtra(AlarmClock.EXTRA_SKIP_UI, true)
+        }
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            Toast.makeText(context, "${timerParam[1]} timer start!", Toast.LENGTH_SHORT).show()
+        }
+        safeStartActiviy(context, intent)
     }
 }

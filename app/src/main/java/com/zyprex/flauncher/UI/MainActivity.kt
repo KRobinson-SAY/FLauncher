@@ -184,6 +184,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    @Deprecated("onBackPressed")
     override fun onBackPressed() {
         replaceFragment(PanelFragment())
         //super.onBackPressed()

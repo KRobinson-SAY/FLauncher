@@ -119,6 +119,7 @@ class PanelVerdict(val context: Context) {
             }
             "shortcut" -> starter.shortcutsOpen(param)
             "menu" -> starter.openMenu(param)
+            "timer" -> starter.runTimer(param)
         }
     }
 }
