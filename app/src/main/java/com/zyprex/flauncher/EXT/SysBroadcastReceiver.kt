@@ -33,6 +33,8 @@ class SysBroadcastReceiver: BroadcastReceiver() {
             addAction(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED)
             addAction(Intent.ACTION_DOCK_EVENT)
             addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 addAction(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -104,6 +106,15 @@ class SysBroadcastReceiver: BroadcastReceiver() {
                     verdict.actionStart("AIRPLANE_MODE_OFF")
                 }
             }
+
+            Intent.ACTION_SCREEN_ON -> {
+                verdict.actionStart("SCREEN_ON")
+            }
+
+            Intent.ACTION_SCREEN_OFF -> {
+                verdict.actionStart("SCREEN_OFF")
+            }
+
             ConnectivityManager.CONNECTIVITY_ACTION -> {
                 if (!MainActivity.appReady()) return
 

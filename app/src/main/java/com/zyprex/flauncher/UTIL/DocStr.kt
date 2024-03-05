@@ -53,7 +53,7 @@ object DocStr {
    ..#back
    ..#home
 ➢ menu#*#**,<name1>;**,<name2>;...
-➢ timer#*#<message>,<minutes>:<seconds>
+➢ timer#*#<label>[,<minutes>:<seconds>]
 
 OPCODE DENOTATIONS:
 
@@ -71,6 +71,7 @@ Event Type:
 ➢ BL_HEADSET_[IN/OUT] (plug status for bluetooth headset)
 ➢ DOCK_[CAR/DESK/LE_DESK/HE_DESK] (dock state)
 ➢ AIRPLANE_MODE_[ON/OFF] (airplane mode)
+➢ SCREEN_[ON/OFF] (screen on off)
 ➢ NETWORK_[ON/OFF] (network status)
 
 Multiple Finger Touches Type:

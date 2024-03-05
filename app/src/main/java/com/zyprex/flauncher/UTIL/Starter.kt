@@ -254,18 +254,30 @@ class Starter(val context: Context) {
     }
 
     fun runTimer(param: String) {
-        val timerParam = param.split(",".toRegex(), 2)
-        val timerHM = timerParam[1].split(":".toRegex(), 2)
-        val timerLen = timerHM[0].toInt() * 60 + timerHM[1].toInt()
-        val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
-            putExtra(AlarmClock.EXTRA_MESSAGE, timerParam[0])
-            putExtra(AlarmClock.EXTRA_LENGTH, timerLen)
-            putExtra(AlarmClock.EXTRA_SKIP_UI, true)
+        if (param.contains(",") && param.contains(":")) {
+            val timerParam = param.split(",".toRegex(), 2)
+            val timerHM = timerParam[1].split(":".toRegex(), 2)
+            val timerLen = timerHM[0].toInt() * 60 + timerHM[1].toInt()
+            val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
+                putExtra(AlarmClock.EXTRA_MESSAGE, timerParam[0])
+                putExtra(AlarmClock.EXTRA_LENGTH, timerLen)
+                putExtra(AlarmClock.EXTRA_SKIP_UI, true)
+            }
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                Toast.makeText(context, "[${timerHM[0]}:${timerHM[1]}] timer '${timerParam[0]}' start!"
+                    , Toast.LENGTH_SHORT).show()
+            }
+            safeStartActiviy(context, intent)
+        } else {
+            val intent = Intent(AlarmClock.ACTION_DISMISS_TIMER).apply {
+                putExtra(AlarmClock.ALARM_SEARCH_MODE_LABEL, param)
+            }
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                Toast.makeText(context, "timer '${param}' cancel!", Toast.LENGTH_SHORT).show()
+            }
+            safeStartActiviy(context, intent)
         }
-        val handler = Handler(Looper.getMainLooper())
-        handler.post {
-            Toast.makeText(context, "${timerParam[1]} timer start!", Toast.LENGTH_SHORT).show()
-        }
-        safeStartActiviy(context, intent)
     }
 }
