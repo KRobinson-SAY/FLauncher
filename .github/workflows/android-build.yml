@@ -1,3 +1,5 @@
+# .github/workflows/android-build.yml
+
 name: Android Release Build
 
 on:
@@ -10,53 +12,52 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # Ensure sdkmanager and platform-tools live here, and JDK<sup>17</sup> is used
     env:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
+    # Force all `run:` commands into your project folder
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+
     steps:
-      # 1. Check out your repo
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      # 2. Set up JDK 17 for the Android Gradle Plugin
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: '17'
 
-      # 3. Ensure sdkmanager and platform-tools are on PATH
       - name: Add Android SDK tools to PATH
         run: |
           echo "${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "${ANDROID_SDK_ROOT}/platform-tools"       >> $GITHUB_PATH
 
-      # 4. Install Flutter 3.7.5
-      - name: Set up Flutter
+      - name: Set up Flutter 3.7.5
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: '3.7.5'
 
-      # 5. Accept Android SDK licenses
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
 
-      # 6. Install required Android SDK packages
       - name: Install Android SDK packages
         run: |
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-31"
           sdkmanager "build-tools;31.0.0"
 
-      # 7. Fetch dependencies and build the APK in your project folder
-      - name: Fetch dependencies & build
-        working-directory: ${{ github.workspace }}
-        run: |
-          flutter pub get
-          flutter build apk --release
+      - name: Flutter pub get
+        run: flutter pub get
 
-      # 8. Upload the built APK as an artifact
+      - name: Build release APK
+        run: flutter build apk --release
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
